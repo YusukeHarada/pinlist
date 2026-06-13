@@ -11,18 +11,17 @@ const CATEGORY_ICON: Record<SpotCategory, string> = {
   other: "📍",
 };
 
-const CATEGORY_LABEL: Record<SpotCategory, string> = {
-  restaurant: "飲食店",
-  cafe: "カフェ",
-  camping: "アウトドア",
-  sightseeing: "観光",
-  other: "その他",
-};
-
 type Props = {
   spot: Spot;
   backHref?: string;
 };
+
+function shortenAddress(address: string): string {
+  const s = address.replace(/^日本[、,]\s*(?:〒[\d-]+\s*)?/, "");
+  const m = s.match(/^(.+?[都道府県])(.+?郡)?(.+?[市区町村])/);
+  if (m) return m[1] + (m[2] ?? "") + m[3];
+  return s.replace(/[\d０-９].+$/, "").trim();
+}
 
 export default function SpotCard({ spot, backHref }: Props) {
   const stars = "★".repeat(spot.priority) + "☆".repeat(3 - spot.priority);
@@ -40,15 +39,7 @@ export default function SpotCard({ spot, backHref }: Props) {
               <p className="truncate font-semibold text-gray-800 dark:text-gray-100">{spot.name}</p>
               <span className="shrink-0 text-sm text-yellow-500">{stars}</span>
             </div>
-            <p className="mt-0.5 truncate text-sm text-gray-500 dark:text-gray-400">{spot.address}</p>
-            <div className="mt-1 flex items-center gap-2">
-              <span className="rounded-full bg-gray-100 dark:bg-gray-700 px-2 py-0.5 text-xs text-gray-600 dark:text-gray-300">
-                {CATEGORY_LABEL[spot.category]}
-              </span>
-              {spot.memo && (
-                <span className="truncate text-xs text-gray-400 dark:text-gray-500">{spot.memo}</span>
-              )}
-            </div>
+            <p className="mt-0.5 truncate text-sm text-gray-500 dark:text-gray-400">{shortenAddress(spot.address)}</p>
           </div>
         </div>
       </div>
