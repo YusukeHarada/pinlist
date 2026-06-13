@@ -29,14 +29,13 @@ export default function MapPage() {
       setOptions({ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY! });
       const { Map } = await importLibrary("maps") as google.maps.MapsLibrary;
       const { AdvancedMarkerElement } = await importLibrary("marker") as google.maps.MarkerLibrary;
+      const { LatLngBounds } = await importLibrary("core") as google.maps.CoreLibrary;
 
       // 初回のみ地図を生成
       if (!mapInstanceRef.current) {
         mapInstanceRef.current = new Map(mapRef.current!, {
-          center: spots.length > 0
-            ? { lat: spots[0].lat, lng: spots[0].lng }
-            : { lat: 35.6762, lng: 139.6503 },
-          zoom: 12,
+          center: { lat: 35.6762, lng: 139.6503 },
+          zoom: 10,
           mapId: "pinlist-map",
           disableDefaultUI: true,
           zoomControl: true,
@@ -48,6 +47,16 @@ export default function MapPage() {
       // 既存マーカーを削除
       markersRef.current.forEach((m) => { m.map = null; });
       markersRef.current = [];
+
+      // 全スポットが収まるようにビューを調整
+      if (spots.length === 1) {
+        map.setCenter({ lat: spots[0].lat, lng: spots[0].lng });
+        map.setZoom(14);
+      } else if (spots.length > 1) {
+        const bounds = new LatLngBounds();
+        spots.forEach((s) => bounds.extend({ lat: s.lat, lng: s.lng }));
+        map.fitBounds(bounds, { top: 60, right: 20, bottom: 20, left: 20 });
+      }
 
       // ピンを再描画
       spots.forEach((spot) => {
