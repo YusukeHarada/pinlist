@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import PlaceAutocomplete from "@/components/PlaceAutocomplete";
 import type { SelectedPlace } from "@/components/PlaceAutocomplete";
 import type { SpotCategory } from "@/types/spot";
+import { addSpot } from "@/lib/firestore";
 
 const CATEGORY_LABEL: Record<SpotCategory, string> = {
   restaurant: "飲食店",
@@ -15,22 +17,46 @@ const CATEGORY_LABEL: Record<SpotCategory, string> = {
 
 const CATEGORIES = Object.entries(CATEGORY_LABEL) as [SpotCategory, string][];
 
+const LIST_ID = "default";
+
 export default function AddPage() {
+  const router = useRouter();
   const [place, setPlace] = useState<SelectedPlace | null>(null);
   const [category, setCategory] = useState<SpotCategory>("other");
   const [memo, setMemo] = useState("");
   const [priority, setPriority] = useState<1 | 2 | 3>(2);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   function handleSelect(selected: SelectedPlace) {
     setPlace(selected);
     setCategory(selected.suggestedCategory);
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!place) return;
-    // TODO: Firestoreへの保存を実装
-    console.log({ ...place, category, memo, priority });
+    setSaving(true);
+    setError(null);
+    try {
+      await addSpot({
+        name: place.name,
+        address: place.address,
+        lat: place.lat,
+        lng: place.lng,
+        placeId: place.placeId,
+        category,
+        memo,
+        priority,
+        listId: LIST_ID,
+      });
+      router.push("/");
+    } catch (err) {
+      setError("保存に失敗しました。もう一度お試しください。");
+      console.error(err);
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -103,12 +129,18 @@ export default function AddPage() {
           />
         </div>
 
+        {error && (
+          <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
+            {error}
+          </p>
+        )}
+
         <button
           type="submit"
-          disabled={!place}
+          disabled={!place || saving}
           className="rounded-xl bg-blue-600 py-3 text-base font-semibold text-white shadow disabled:opacity-40"
         >
-          保存する
+          {saving ? "保存中..." : "保存する"}
         </button>
       </form>
     </main>
