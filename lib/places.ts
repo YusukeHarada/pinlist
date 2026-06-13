@@ -24,10 +24,8 @@ export async function fetchPredictions(
     await importLibrary("places") as google.maps.PlacesLibrary;
 
   const token = new AutocompleteSessionToken();
-  const request: google.maps.places.AutocompleteSuggestionRequest = {
-    input,
-    sessionToken: token,
-  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const request: any = { input, sessionToken: token };
   if (locationBias) {
     request.locationBias = new google.maps.Circle({
       center: locationBias,
@@ -44,7 +42,7 @@ export async function fetchPredictions(
       const p = s.placePrediction!;
       return {
         placeId: p.placeId,
-        mainText: p.mainText.toString(),
+        mainText: p.mainText?.toString() ?? "",
         secondaryText: p.secondaryText?.toString() ?? "",
       };
     });
