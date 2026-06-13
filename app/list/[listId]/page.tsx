@@ -1,13 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import ShareButton from "@/components/ShareButton";
-import Link from "next/link";
+import { useParams } from "next/navigation";
 import SpotCard from "@/components/SpotCard";
 import { useSpots } from "@/hooks/useSpots";
 import type { Spot, SpotCategory } from "@/types/spot";
-
-const LIST_ID = "default";
 
 const CATEGORIES: { value: SpotCategory | "all"; label: string }[] = [
   { value: "all", label: "すべて" },
@@ -18,14 +15,12 @@ const CATEGORIES: { value: SpotCategory | "all"; label: string }[] = [
   { value: "other", label: "その他" },
 ];
 
-type SortKey = "createdAt" | "priority";
-
-export default function HomePage() {
-  const { spots, loading } = useSpots(LIST_ID);
+export default function SharedListPage() {
+  const { listId } = useParams<{ listId: string }>();
+  const { spots, loading } = useSpots(listId);
   const [tab, setTab] = useState<"unvisited" | "visited">("unvisited");
   const [category, setCategory] = useState<SpotCategory | "all">("all");
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState<SortKey>("createdAt");
 
   const filtered = useMemo(() => {
     return spots
@@ -39,21 +34,14 @@ export default function HomePage() {
           s.address.toLowerCase().includes(q) ||
           s.memo?.toLowerCase().includes(q)
         );
-      })
-      .sort((a: Spot, b: Spot) => {
-        if (sort === "priority") return b.priority - a.priority;
-        return 0;
       });
-  }, [spots, tab, category, search, sort]);
+  }, [spots, tab, category, search]);
 
   return (
     <main className="mx-auto max-w-lg px-4 pb-24 pt-6">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-800">行きたい場所</h1>
-        <ShareButton listId={LIST_ID} />
-      </div>
+      <h1 className="mb-1 text-xl font-bold text-gray-800">行きたい場所リスト</h1>
+      <p className="mb-4 text-xs text-gray-400">共有リスト</p>
 
-      {/* 未訪問 / 訪問済みタブ */}
       <div className="mb-4 flex rounded-xl bg-gray-100 p-1">
         {(["unvisited", "visited"] as const).map((t) => (
           <button
@@ -68,7 +56,6 @@ export default function HomePage() {
         ))}
       </div>
 
-      {/* 検索 */}
       <input
         type="text"
         value={search}
@@ -77,8 +64,7 @@ export default function HomePage() {
         className="mb-3 w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm outline-none focus:border-blue-500"
       />
 
-      {/* カテゴリフィルター */}
-      <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
+      <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
         {CATEGORIES.map((c) => (
           <button
             key={c.value}
@@ -94,26 +80,11 @@ export default function HomePage() {
         ))}
       </div>
 
-      {/* ソート */}
-      <div className="mb-4 flex justify-end">
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value as SortKey)}
-          className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs text-gray-600 outline-none"
-        >
-          <option value="createdAt">登録日順</option>
-          <option value="priority">優先度順</option>
-        </select>
-      </div>
-
-      {/* スポット一覧 */}
       {loading ? (
         <p className="py-12 text-center text-sm text-gray-400">読み込み中...</p>
       ) : filtered.length === 0 ? (
         <p className="py-12 text-center text-sm text-gray-400">
-          {tab === "unvisited"
-            ? "行きたい場所を追加してみましょう"
-            : "まだ訪問済みの場所はありません"}
+          {tab === "unvisited" ? "未訪問の場所はありません" : "訪問済みの場所はありません"}
         </p>
       ) : (
         <div className="flex flex-col gap-3">
@@ -122,14 +93,6 @@ export default function HomePage() {
           ))}
         </div>
       )}
-
-      {/* FABボタン */}
-      <Link
-        href="/add"
-        className="fixed bottom-20 right-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-2xl text-white shadow-lg active:bg-blue-700"
-      >
-        ＋
-      </Link>
     </main>
   );
 }
