@@ -21,13 +21,17 @@ const CATEGORY_LABEL: Record<SpotCategory, string> = {
 
 type Props = {
   spot: Spot;
+  backHref?: string;
 };
 
-export default function SpotCard({ spot }: Props) {
+export default function SpotCard({ spot, backHref }: Props) {
   const stars = "★".repeat(spot.priority) + "☆".repeat(3 - spot.priority);
+  const href = backHref
+    ? `/spot/${spot.id}?from=${encodeURIComponent(backHref)}`
+    : `/spot/${spot.id}`;
 
   return (
-    <Link href={`/spot/${spot.id}`}>
+    <Link href={href}>
       <div className="rounded-2xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-4 shadow-sm active:bg-gray-50 dark:active:bg-gray-700">
         <div className="flex items-start gap-3">
           <span className="mt-0.5 text-2xl">{CATEGORY_ICON[spot.category]}</span>

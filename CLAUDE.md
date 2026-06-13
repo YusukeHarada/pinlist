@@ -26,31 +26,31 @@ FirebaseはFirestoreの共有モデルが共有リンク実装に向いている
 
 ---
 
-## ディレクトリ構成（予定）
+## ディレクトリ構成
 
 ```
 /
 ├── app/
-│   ├── page.tsx              # リストビュー（デフォルト）
-│   ├── map/page.tsx          # マップビュー
-│   ├── add/page.tsx          # 場所登録画面
-│   ├── spot/[id]/page.tsx    # 詳細画面
+│   ├── page.tsx                  # リストビュー（デフォルト）
+│   ├── map/page.tsx              # マップビュー
+│   ├── add/page.tsx              # 場所登録画面
+│   ├── spot/[id]/page.tsx        # 詳細画面
+│   ├── list/[listId]/page.tsx    # 共有リンク閲覧画面
 │   └── layout.tsx
 ├── components/
-│   ├── SpotCard.tsx          # リスト用カード
-│   ├── SpotMap.tsx           # マップ表示コンポーネント
-│   ├── PlaceAutocomplete.tsx # Places APIオートコンプリート入力
-│   ├── FilterBar.tsx         # 絞り込みUI
-│   └── BottomNav.tsx         # スマホ用ボトムナビゲーション
+│   ├── SpotCard.tsx              # リスト用カード
+│   ├── PlaceAutocomplete.tsx     # Places APIオートコンプリート入力
+│   ├── BottomNav.tsx             # スマホ用ボトムナビゲーション
+│   └── ShareButton.tsx           # 共有リンクボタン
 ├── lib/
-│   ├── firebase.ts           # Firebase初期化
-│   ├── firestore.ts          # Firestoreのread/write関数
-│   └── places.ts             # Places API呼び出し関数
-├── types/
-│   └── spot.ts               # Spot型定義
+│   ├── firebase.ts               # Firebase初期化
+│   ├── firestore.ts              # Firestoreのread/write関数
+│   ├── places.ts                 # Places API呼び出し関数
+│   └── categoryMapper.ts         # place types → SpotCategory マッピング
 ├── hooks/
-│   ├── useSpots.ts           # スポット一覧取得hook
-│   └── useSpot.ts            # スポット1件取得hook
+│   └── useSpots.ts               # スポット一覧取得hook
+├── types/
+│   └── spot.ts                   # Spot型定義
 └── CLAUDE.md
 ```
 
@@ -158,6 +158,12 @@ NEXT_PUBLIC_FIREBASE_APP_ID=
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
 ```
 
+### Google Cloud で有効化が必要な API
+
+- Places API（New）
+- Maps JavaScript API
+- Maps Static API（詳細画面の地図プレビューに使用）
+
 ---
 
 ## MVPスコープ（初回リリース）
@@ -182,12 +188,12 @@ NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
 ## 開発の進め方
 
 1. ~~`npx create-next-app@latest` でプロジェクト作成~~ ✅ 完了
-2. Firebase・Google Maps APIのキーを取得して `.env.local` に設定
+2. ~~Firebase・Google Maps APIのキーを取得して `.env.local` に設定~~ ✅ 完了
 3. ~~Places APIオートコンプリートの動作確認（`PlaceAutocomplete.tsx`）~~ ✅ 完了
-4. Firestoreのread/write関数を実装（`lib/firestore.ts`）
-5. リストビューとマップビューを実装
-6. 共有リンク機能を実装
-7. Vercelにデプロイ
+4. ~~Firestoreのread/write関数を実装（`lib/firestore.ts`）~~ ✅ 完了
+5. ~~リストビューとマップビューを実装~~ ✅ 完了
+6. ~~共有リンク機能を実装~~ ✅ 完了
+7. ~~Vercelにデプロイ~~ ✅ 完了
 
 ---
 
