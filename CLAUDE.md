@@ -46,7 +46,8 @@ FirebaseはFirestoreの共有モデルが共有リンク実装に向いている
 │   ├── firebase.ts               # Firebase初期化
 │   ├── firestore.ts              # Firestoreのread/write関数
 │   ├── places.ts                 # Places API呼び出し関数
-│   └── categoryMapper.ts         # place types → SpotCategory マッピング
+│   ├── categoryMapper.ts         # place types → SpotCategory マッピング
+│   └── cityExtractor.ts          # 住所から市区町村を抽出
 ├── hooks/
 │   └── useSpots.ts               # スポット一覧取得hook
 ├── types/
@@ -69,7 +70,7 @@ type Spot = {
   lng: number;                 // 経度（Places APIから自動取得）
   placeId: string;             // Google Place ID（Maps連携のキー）
   category: SpotCategory;      // カテゴリ
-  memo: string;                // メモ（なぜ行きたいか等）
+  memo?: string;               // メモ（なぜ行きたいか等、任意）
   priority: 1 | 2 | 3;        // 優先度（★1〜★3）
   status: 'unvisited' | 'visited'; // 未訪問 / 訪問済み
   createdAt: Timestamp;        // 登録日時（自動付与）
@@ -104,7 +105,7 @@ type SpotList = {
 ### 1. リストビュー（`/`）
 - スポットをカード形式で一覧表示
 - タブ：「未訪問」「訪問済み」切り替え
-- 絞り込み：カテゴリ・優先度
+- 絞り込み：カテゴリ・エリア（市区町村、2種類以上登録時に表示）
 - テキスト検索（場所名・住所・メモ）
 - 優先度順・登録日順ソート
 - 右下のFABボタンで登録画面へ
@@ -204,7 +205,8 @@ npm test         # ビジネスロジックのテスト（lib/）
 ```
 
 - `lib/categoryMapper.ts` — place types → SpotCategory マッピング（カバレッジ 100%）
-- `lib/places.ts` — Places API ラッパー（カバレッジ ~98%）
+- `lib/places.ts` — Places API ラッパー（カバレッジ 100%）
+- `lib/cityExtractor.ts` — 住所から市区町村を抽出（カバレッジ 100%）
 - 外部 API（Google Maps）は `__mocks__/@googlemaps/js-api-loader.ts` でモック化
 
 ---
