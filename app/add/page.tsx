@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import PlaceAutocomplete from "@/components/PlaceAutocomplete";
 import type { SelectedPlace } from "@/components/PlaceAutocomplete";
 import type { SpotCategory } from "@/types/spot";
-import { addSpot } from "@/lib/firestore";
+import { addSpot, DuplicateSpotError } from "@/lib/firestore";
 
 const CATEGORY_LABEL: Record<SpotCategory, string> = {
   restaurant: "飲食店",
@@ -52,8 +52,12 @@ export default function AddPage() {
       });
       router.push("/");
     } catch (err) {
-      setError("保存に失敗しました。もう一度お試しください。");
-      console.error(err);
+      if (err instanceof DuplicateSpotError) {
+        setError("この場所はすでに登録済みです");
+      } else {
+        setError("保存に失敗しました。もう一度お試しください。");
+        console.error(err);
+      }
     } finally {
       setSaving(false);
     }
