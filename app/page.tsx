@@ -1,32 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import ShareButton from "@/components/ShareButton";
 import Link from "next/link";
 import SpotCard from "@/components/SpotCard";
 import { useSpots } from "@/hooks/useSpots";
 import { extractCity } from "@/lib/cityExtractor";
 import type { Spot, SpotCategory } from "@/types/spot";
-
-function ViewportDebug() {
-  const [info, setInfo] = useState("");
-  useEffect(() => {
-    const vv = window.visualViewport;
-    setInfo(
-      `scale:${vv?.scale?.toFixed(3)} vw:${vv?.width?.toFixed(0)} dpr:${window.devicePixelRatio} cw:${document.documentElement.clientWidth}`
-    );
-    const handler = () => setInfo(
-      `scale:${vv?.scale?.toFixed(3)} vw:${vv?.width?.toFixed(0)} dpr:${window.devicePixelRatio} cw:${document.documentElement.clientWidth}`
-    );
-    vv?.addEventListener("resize", handler);
-    return () => vv?.removeEventListener("resize", handler);
-  }, []);
-  return (
-    <div style={{position:"fixed",top:0,left:0,background:"rgba(0,0,0,0.7)",color:"#0f0",fontSize:11,padding:"2px 6px",zIndex:9999,fontFamily:"monospace"}}>
-      {info}
-    </div>
-  );
-}
 
 const LIST_ID = "default";
 
@@ -49,7 +29,6 @@ export default function HomePage() {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<SortKey>("createdAt");
 
-  // 登録済みスポットから市区町村一覧を生成
   const cities = useMemo(() => {
     const set = new Set<string>();
     spots.forEach((s) => {
@@ -82,21 +61,19 @@ export default function HomePage() {
   }, [spots, tab, category, city, search, sort]);
 
   return (
-    <>
-    <ViewportDebug />
-    <main className="mx-auto max-w-lg px-4 pb-24 pt-6">
-      <div className="mb-4 flex items-center justify-between">
+    <main className="mx-auto max-w-lg px-4 pb-24 pt-4">
+      <div className="mb-3 flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">行きたい場所</h1>
         <ShareButton listId={LIST_ID} />
       </div>
 
       {/* 未訪問 / 訪問済みタブ */}
-      <div className="mb-4 flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1">
+      <div className="mb-3 flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1">
         {(["unvisited", "visited"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${
+            className={`flex-1 rounded-lg py-1.5 text-sm font-medium transition ${
               tab === t
                 ? "bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-sm"
                 : "text-gray-500 dark:text-gray-400"
@@ -113,16 +90,16 @@ export default function HomePage() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="場所名・住所・メモで検索"
-        className="mb-3 w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-4 py-2.5 text-base outline-none focus:border-blue-500 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+        className="mb-2 w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-4 py-2 text-base outline-none focus:border-blue-500 placeholder:text-gray-400 dark:placeholder:text-gray-500"
       />
 
       {/* カテゴリフィルター */}
-      <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
+      <div className="mb-2 flex gap-2 overflow-x-auto pb-1">
         {CATEGORIES.map((c) => (
           <button
             key={c.value}
             onClick={() => setCategory(c.value)}
-            className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition ${
+            className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium transition ${
               category === c.value
                 ? "bg-blue-600 text-white"
                 : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
@@ -135,10 +112,10 @@ export default function HomePage() {
 
       {/* エリアフィルター（市区町村が2つ以上あるときだけ表示） */}
       {cities.length >= 2 && (
-        <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
+        <div className="mb-2 flex gap-2 overflow-x-auto pb-1">
           <button
             onClick={() => setCity("all")}
-            className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition ${
+            className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium transition ${
               city === "all"
                 ? "bg-green-600 text-white"
                 : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
@@ -150,7 +127,7 @@ export default function HomePage() {
             <button
               key={c}
               onClick={() => setCity(c)}
-              className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition ${
+              className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium transition ${
                 city === c
                   ? "bg-green-600 text-white"
                   : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
@@ -163,7 +140,7 @@ export default function HomePage() {
       )}
 
       {/* ソート */}
-      <div className="mb-4 flex justify-end">
+      <div className="mb-3 flex justify-end">
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value as SortKey)}
@@ -184,7 +161,7 @@ export default function HomePage() {
             : "まだ訪問済みの場所はありません"}
         </p>
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           {filtered.map((spot: Spot) => (
             <SpotCard key={spot.id} spot={spot} />
           ))}
@@ -199,6 +176,5 @@ export default function HomePage() {
         ＋
       </Link>
     </main>
-    </>
   );
 }
