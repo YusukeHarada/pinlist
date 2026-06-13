@@ -59,8 +59,8 @@ npm run build  # プロダクションビルド
 | `hooks/useSpots.ts` | スポット一覧取得フック |
 | `types/spot.ts` | Spot / SpotCategory 型定義 |
 
-## Google Cloud で有効化が必要な API
+## モバイル対応メモ
 
-- Places API（New）
-- Maps JavaScript API
-- Maps Static API（詳細画面の地図プレビューに使用）
+- `layout.tsx` で `viewport` を明示的にエクスポート（Next.js 15 の要件）
+- `<input>` の `font-size` は 16px 以上に統一（iOS Safari のオートズーム防止）
+
