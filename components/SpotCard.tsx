@@ -31,12 +31,12 @@ export default function SpotCard({ spot, backHref }: Props) {
 
   return (
     <Link href={href}>
-      <div className="rounded-2xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3 shadow-sm active:bg-gray-50 dark:active:bg-gray-700">
+      <div className="rounded-2xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-2 shadow-sm active:bg-gray-50 dark:active:bg-gray-700">
         <div className="flex items-start gap-3">
           <span className="mt-0.5 text-xl">{CATEGORY_ICON[spot.category]}</span>
           <div className="min-w-0 flex-1">
             <div className="flex items-center justify-between gap-2">
-              <p className="truncate font-semibold text-gray-800 dark:text-gray-100">{spot.name}</p>
+              <p className="truncate text-sm font-medium text-gray-800 dark:text-gray-100">{spot.name}</p>
               <span className="shrink-0 text-sm text-yellow-500">{stars}</span>
             </div>
             <p className="mt-0.5 truncate text-sm text-gray-500 dark:text-gray-400">{shortenAddress(spot.address)}</p>
