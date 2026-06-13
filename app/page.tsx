@@ -1,12 +1,32 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ShareButton from "@/components/ShareButton";
 import Link from "next/link";
 import SpotCard from "@/components/SpotCard";
 import { useSpots } from "@/hooks/useSpots";
 import { extractCity } from "@/lib/cityExtractor";
 import type { Spot, SpotCategory } from "@/types/spot";
+
+function ViewportDebug() {
+  const [info, setInfo] = useState("");
+  useEffect(() => {
+    const vv = window.visualViewport;
+    setInfo(
+      `scale:${vv?.scale?.toFixed(3)} vw:${vv?.width?.toFixed(0)} dpr:${window.devicePixelRatio} cw:${document.documentElement.clientWidth}`
+    );
+    const handler = () => setInfo(
+      `scale:${vv?.scale?.toFixed(3)} vw:${vv?.width?.toFixed(0)} dpr:${window.devicePixelRatio} cw:${document.documentElement.clientWidth}`
+    );
+    vv?.addEventListener("resize", handler);
+    return () => vv?.removeEventListener("resize", handler);
+  }, []);
+  return (
+    <div style={{position:"fixed",top:0,left:0,background:"rgba(0,0,0,0.7)",color:"#0f0",fontSize:11,padding:"2px 6px",zIndex:9999,fontFamily:"monospace"}}>
+      {info}
+    </div>
+  );
+}
 
 const LIST_ID = "default";
 
@@ -62,6 +82,8 @@ export default function HomePage() {
   }, [spots, tab, category, city, search, sort]);
 
   return (
+    <>
+    <ViewportDebug />
     <main className="mx-auto max-w-lg px-4 pb-24 pt-6">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">行きたい場所</h1>
@@ -177,5 +199,6 @@ export default function HomePage() {
         ＋
       </Link>
     </main>
+    </>
   );
 }
