@@ -12,7 +12,12 @@ export default function ShareButton({ listId }: Props) {
   async function handleShare() {
     const url = `${location.origin}/list/${listId}`;
     if (navigator.share) {
-      await navigator.share({ title: "行きたい場所リスト", url });
+      try {
+        await navigator.share({ title: "行きたい場所リスト", url });
+      } catch (e) {
+        if (e instanceof Error && e.name === "AbortError") return;
+        throw e;
+      }
     } else {
       await navigator.clipboard.writeText(url);
       setCopied(true);
