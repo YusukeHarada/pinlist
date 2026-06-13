@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // スポット: listId が一致するリクエストのみ操作可能
+    match /spots/{spotId} {
+      allow create: if request.resource.data.listId is string
+                    && request.resource.data.listId.size() > 0;
+
+      allow read, update, delete: if resource.data.listId is string;
+    }
+
+    // リスト: listId を知っている人なら誰でも閲覧・作成可
+    match /lists/{listId} {
+      allow read, write: if true;
+    }
+  }
+}
