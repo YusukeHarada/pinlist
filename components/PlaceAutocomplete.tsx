@@ -167,7 +167,7 @@ export default function PlaceAutocomplete({
           onChange={(e) => handleInputChange(e.target.value)}
           onFocus={handleFocus}
           placeholder={placeholder}
-          className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 pr-10 text-base shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-4 py-3 pr-10 text-base shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 placeholder:text-gray-400 dark:placeholder:text-gray-500"
         />
         {isLoading && (
           <span className="absolute right-3 animate-spin text-gray-400">⏳</span>
@@ -185,27 +185,27 @@ export default function PlaceAutocomplete({
       </div>
 
       {showDropdown && (
-        <ul className="absolute z-50 mt-1 w-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
+        <ul className="absolute z-50 mt-1 w-full overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg">
           {showRecent && recentPlaces.length > 0 && (
             <>
-              <li className="px-4 py-2 text-xs font-semibold text-gray-400">
+              <li className="px-4 py-2 text-xs font-semibold text-gray-400 dark:text-gray-500">
                 最近選んだ場所
               </li>
               {recentPlaces.map((place) => (
                 <li
                   key={place.placeId}
                   onClick={() => handleSelect(place.placeId, place.name)}
-                  className="flex cursor-pointer items-center gap-3 px-4 py-3 hover:bg-blue-50 active:bg-blue-100"
+                  className="flex cursor-pointer items-center gap-3 px-4 py-3 hover:bg-blue-50 dark:hover:bg-blue-900/30 active:bg-blue-100 dark:active:bg-blue-900/50"
                 >
                   <span className="text-lg">{CATEGORY_ICON[place.suggestedCategory]}</span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-medium text-gray-800">{place.name}</p>
-                    <p className="truncate text-sm text-gray-500">{place.address}</p>
+                    <p className="truncate font-medium text-gray-800 dark:text-gray-100">{place.name}</p>
+                    <p className="truncate text-sm text-gray-500 dark:text-gray-400">{place.address}</p>
                   </div>
                   <button
                     type="button"
                     onClick={(e) => handleRemoveRecent(e, place.placeId)}
-                    className="ml-1 shrink-0 text-sm text-gray-300 hover:text-red-400"
+                    className="ml-1 shrink-0 text-sm text-gray-300 dark:text-gray-600 hover:text-red-400"
                     aria-label="履歴から削除"
                   >
                     ✕
@@ -219,12 +219,12 @@ export default function PlaceAutocomplete({
             <li
               key={pred.placeId}
               onClick={() => handleSelect(pred.placeId, pred.mainText)}
-              className="flex cursor-pointer items-center gap-3 px-4 py-3 hover:bg-blue-50 active:bg-blue-100"
+              className="flex cursor-pointer items-center gap-3 px-4 py-3 hover:bg-blue-50 dark:hover:bg-blue-900/30 active:bg-blue-100 dark:active:bg-blue-900/50"
             >
               <span className="text-lg">📍</span>
               <div className="min-w-0 flex-1">
-                <p className="truncate font-medium text-gray-800">{pred.mainText}</p>
-                <p className="truncate text-sm text-gray-500">{pred.secondaryText}</p>
+                <p className="truncate font-medium text-gray-800 dark:text-gray-100">{pred.mainText}</p>
+                <p className="truncate text-sm text-gray-500 dark:text-gray-400">{pred.secondaryText}</p>
               </div>
             </li>
           ))}
