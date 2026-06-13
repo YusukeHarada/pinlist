@@ -61,7 +61,7 @@ export default function HomePage() {
   }, [spots, tab, category, city, search, sort]);
 
   return (
-    <main className="mx-auto max-w-lg px-4 pb-24 pt-4">
+    <main className="mx-auto max-w-lg overflow-x-hidden px-4 pb-24 pt-4">
       <div className="mb-3 flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">行きたい場所</h1>
         <ShareButton listId={LIST_ID} />
