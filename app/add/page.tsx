@@ -60,7 +60,7 @@ export default function AddPage() {
   }
 
   return (
-    <main className="mx-auto max-w-lg px-4 py-8">
+    <main className="mx-auto max-w-lg px-4 pt-8 pb-24">
       <h1 className="mb-6 text-xl font-bold text-gray-800 dark:text-gray-100">場所を登録</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <div>

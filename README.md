@@ -55,6 +55,7 @@ npm run build  # プロダクションビルド
 | `lib/firestore.ts` | Firestore read/write 関数 |
 | `lib/places.ts` | Places API ラッパー |
 | `lib/categoryMapper.ts` | place types → SpotCategory マッピング |
+| `lib/cityExtractor.ts` | 住所から市区町村を抽出 |
 | `hooks/useSpots.ts` | スポット一覧取得フック |
 | `types/spot.ts` | Spot / SpotCategory 型定義 |
 

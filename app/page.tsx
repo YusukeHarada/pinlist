@@ -5,6 +5,7 @@ import ShareButton from "@/components/ShareButton";
 import Link from "next/link";
 import SpotCard from "@/components/SpotCard";
 import { useSpots } from "@/hooks/useSpots";
+import { extractCity } from "@/lib/cityExtractor";
 import type { Spot, SpotCategory } from "@/types/spot";
 
 const LIST_ID = "default";
@@ -24,13 +25,25 @@ export default function HomePage() {
   const { spots, loading } = useSpots(LIST_ID);
   const [tab, setTab] = useState<"unvisited" | "visited">("unvisited");
   const [category, setCategory] = useState<SpotCategory | "all">("all");
+  const [city, setCity] = useState<string>("all");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<SortKey>("createdAt");
+
+  // 登録済みスポットから市区町村一覧を生成
+  const cities = useMemo(() => {
+    const set = new Set<string>();
+    spots.forEach((s) => {
+      const c = extractCity(s.address);
+      if (c) set.add(c);
+    });
+    return Array.from(set).sort();
+  }, [spots]);
 
   const filtered = useMemo(() => {
     return spots
       .filter((s: Spot) => s.status === tab)
       .filter((s: Spot) => category === "all" || s.category === category)
+      .filter((s: Spot) => city === "all" || extractCity(s.address) === city)
       .filter((s: Spot) => {
         if (!search.trim()) return true;
         const q = search.toLowerCase();
@@ -46,7 +59,7 @@ export default function HomePage() {
         const bTime = b.createdAt?.seconds ?? 0;
         return bTime - aTime;
       });
-  }, [spots, tab, category, search, sort]);
+  }, [spots, tab, category, city, search, sort]);
 
   return (
     <main className="mx-auto max-w-lg px-4 pb-24 pt-6">
@@ -97,6 +110,35 @@ export default function HomePage() {
           </button>
         ))}
       </div>
+
+      {/* エリアフィルター（市区町村が2つ以上あるときだけ表示） */}
+      {cities.length >= 2 && (
+        <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
+          <button
+            onClick={() => setCity("all")}
+            className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition ${
+              city === "all"
+                ? "bg-green-600 text-white"
+                : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
+            }`}
+          >
+            全エリア
+          </button>
+          {cities.map((c) => (
+            <button
+              key={c}
+              onClick={() => setCity(c)}
+              className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition ${
+                city === c
+                  ? "bg-green-600 text-white"
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
+              }`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* ソート */}
       <div className="mb-4 flex justify-end">
