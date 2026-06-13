@@ -15,7 +15,7 @@ export type Spot = {
   lng: number;
   placeId: string;
   category: SpotCategory;
-  memo: string;
+  memo?: string;
   priority: 1 | 2 | 3;
   status: "unvisited" | "visited";
   createdAt: Timestamp;

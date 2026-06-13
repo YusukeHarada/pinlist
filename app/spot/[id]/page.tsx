@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { getSpot, markVisited, markUnvisited, deleteSpot } from "@/lib/firestore";
 import type { Spot, SpotCategory } from "@/types/spot";
@@ -25,6 +25,8 @@ const CATEGORY_LABEL: Record<SpotCategory, string> = {
 export default function SpotDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const backHref = searchParams.get("from") ?? "/";
   const [spot, setSpot] = useState<Spot | null>(null);
   const [loading, setLoading] = useState(true);
   const [working, setWorking] = useState(false);
@@ -84,7 +86,7 @@ export default function SpotDetailPage() {
     <main className="mx-auto max-w-lg pb-24">
       {/* ヘッダー */}
       <div className="flex items-center gap-3 px-4 pt-6 pb-4">
-        <Link href="/" className="text-gray-500 dark:text-gray-400">
+        <Link href={backHref} className="text-gray-500 dark:text-gray-400">
           ← 戻る
         </Link>
       </div>

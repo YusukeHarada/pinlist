@@ -19,6 +19,7 @@ export default function MapPage() {
   const { spots, loading } = useSpots(LIST_ID);
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
+  const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
   const [selectedSpot, setSelectedSpot] = useState<Spot | null>(null);
 
   useEffect(() => {
@@ -44,6 +45,10 @@ export default function MapPage() {
 
       const map = mapInstanceRef.current;
 
+      // 既存マーカーを削除
+      markersRef.current.forEach((m) => { m.map = null; });
+      markersRef.current = [];
+
       // ピンを再描画
       spots.forEach((spot) => {
         const pin = document.createElement("div");
@@ -65,6 +70,8 @@ export default function MapPage() {
           setSelectedSpot(spot);
           map.panTo({ lat: spot.lat, lng: spot.lng });
         });
+
+        markersRef.current.push(marker);
       });
     }
 

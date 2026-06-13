@@ -91,7 +91,7 @@ export default function SharedListPage() {
       ) : (
         <div className="flex flex-col gap-3">
           {filtered.map((spot: Spot) => (
-            <SpotCard key={spot.id} spot={spot} />
+            <SpotCard key={spot.id} spot={spot} backHref={`/list/${listId}`} />
           ))}
         </div>
       )}

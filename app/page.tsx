@@ -42,7 +42,9 @@ export default function HomePage() {
       })
       .sort((a: Spot, b: Spot) => {
         if (sort === "priority") return b.priority - a.priority;
-        return 0;
+        const aTime = a.createdAt?.seconds ?? 0;
+        const bTime = b.createdAt?.seconds ?? 0;
+        return bTime - aTime;
       });
   }, [spots, tab, category, search, sort]);
 
