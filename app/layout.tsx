@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import BottomNav from "@/components/BottomNav";
@@ -11,6 +11,12 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   title: "行きたい場所リスト",
   description: "行きたい場所をサクッと登録・管理するアプリ",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

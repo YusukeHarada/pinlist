@@ -91,7 +91,7 @@ export default function HomePage() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="場所名・住所・メモで検索"
-        className="mb-3 w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-4 py-2.5 text-sm outline-none focus:border-blue-500 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+        className="mb-3 w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-4 py-2.5 text-base outline-none focus:border-blue-500 placeholder:text-gray-400 dark:placeholder:text-gray-500"
       />
 
       {/* カテゴリフィルター */}
