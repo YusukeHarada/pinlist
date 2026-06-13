@@ -28,7 +28,7 @@ export default function ShareButton({ listId }: Props) {
   return (
     <button
       onClick={handleShare}
-      className="rounded-full bg-gray-100 px-3 py-1.5 text-sm text-gray-600 transition active:bg-gray-200"
+      className="rounded-full bg-gray-100 dark:bg-gray-700 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 transition active:bg-gray-200 dark:active:bg-gray-600"
     >
       {copied ? "コピーしました！" : "🔗 共有"}
     </button>

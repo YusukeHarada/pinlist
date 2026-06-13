@@ -84,7 +84,7 @@ export default function SpotDetailPage() {
     <main className="mx-auto max-w-lg pb-24">
       {/* ヘッダー */}
       <div className="flex items-center gap-3 px-4 pt-6 pb-4">
-        <Link href="/" className="text-gray-500">
+        <Link href="/" className="text-gray-500 dark:text-gray-400">
           ← 戻る
         </Link>
       </div>
@@ -103,23 +103,23 @@ export default function SpotDetailPage() {
         <div className="flex items-start gap-3">
           <span className="text-3xl">{CATEGORY_ICON[spot.category]}</span>
           <div>
-            <h1 className="text-xl font-bold text-gray-800">{spot.name}</h1>
-            <p className="text-sm text-gray-500">{spot.address}</p>
+            <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">{spot.name}</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{spot.address}</p>
           </div>
         </div>
 
         {/* メタ情報 */}
         <div className="mt-4 flex flex-wrap gap-2">
-          <span className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600">
+          <span className="rounded-full bg-gray-100 dark:bg-gray-800 px-3 py-1 text-sm text-gray-600 dark:text-gray-300">
             {CATEGORY_LABEL[spot.category]}
           </span>
-          <span className="rounded-full bg-yellow-50 px-3 py-1 text-sm text-yellow-600">
+          <span className="rounded-full bg-yellow-50 dark:bg-yellow-900/30 px-3 py-1 text-sm text-yellow-600 dark:text-yellow-400">
             {stars}
           </span>
           <span className={`rounded-full px-3 py-1 text-sm ${
             spot.status === "visited"
-              ? "bg-green-50 text-green-600"
-              : "bg-blue-50 text-blue-600"
+              ? "bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400"
+              : "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
           }`}>
             {spot.status === "visited" ? "訪問済み" : "未訪問"}
           </span>
@@ -127,8 +127,8 @@ export default function SpotDetailPage() {
 
         {/* メモ */}
         {spot.memo && (
-          <div className="mt-4 rounded-xl bg-gray-50 px-4 py-3">
-            <p className="text-sm text-gray-700">{spot.memo}</p>
+          <div className="mt-4 rounded-xl bg-gray-50 dark:bg-gray-800 px-4 py-3">
+            <p className="text-sm text-gray-700 dark:text-gray-300">{spot.memo}</p>
           </div>
         )}
 
@@ -149,7 +149,7 @@ export default function SpotDetailPage() {
             className={`flex h-12 items-center justify-center rounded-xl font-semibold transition disabled:opacity-40 ${
               spot.status === "unvisited"
                 ? "bg-green-600 text-white"
-                : "border border-gray-300 text-gray-600"
+                : "border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300"
             }`}
           >
             {spot.status === "unvisited" ? "訪問済みにする" : "未訪問に戻す"}
@@ -158,7 +158,7 @@ export default function SpotDetailPage() {
           <button
             onClick={handleDelete}
             disabled={working}
-            className="flex h-12 items-center justify-center rounded-xl border border-red-200 font-semibold text-red-500 disabled:opacity-40"
+            className="flex h-12 items-center justify-center rounded-xl border border-red-200 dark:border-red-900 font-semibold text-red-500 dark:text-red-400 disabled:opacity-40"
           >
             削除する
           </button>

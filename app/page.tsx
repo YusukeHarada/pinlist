@@ -49,18 +49,20 @@ export default function HomePage() {
   return (
     <main className="mx-auto max-w-lg px-4 pb-24 pt-6">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-800">行きたい場所</h1>
+        <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">行きたい場所</h1>
         <ShareButton listId={LIST_ID} />
       </div>
 
       {/* 未訪問 / 訪問済みタブ */}
-      <div className="mb-4 flex rounded-xl bg-gray-100 p-1">
+      <div className="mb-4 flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1">
         {(["unvisited", "visited"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
             className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${
-              tab === t ? "bg-white text-gray-800 shadow-sm" : "text-gray-500"
+              tab === t
+                ? "bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-sm"
+                : "text-gray-500 dark:text-gray-400"
             }`}
           >
             {t === "unvisited" ? "未訪問" : "訪問済み"}
@@ -74,7 +76,7 @@ export default function HomePage() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="場所名・住所・メモで検索"
-        className="mb-3 w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm outline-none focus:border-blue-500"
+        className="mb-3 w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-4 py-2.5 text-sm outline-none focus:border-blue-500 placeholder:text-gray-400 dark:placeholder:text-gray-500"
       />
 
       {/* カテゴリフィルター */}
@@ -86,7 +88,7 @@ export default function HomePage() {
             className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition ${
               category === c.value
                 ? "bg-blue-600 text-white"
-                : "bg-gray-100 text-gray-600"
+                : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
             }`}
           >
             {c.label}
@@ -99,7 +101,7 @@ export default function HomePage() {
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value as SortKey)}
-          className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs text-gray-600 outline-none"
+          className="rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-xs text-gray-600 dark:text-gray-300 outline-none"
         >
           <option value="createdAt">登録日順</option>
           <option value="priority">優先度順</option>
@@ -110,7 +112,7 @@ export default function HomePage() {
       {loading ? (
         <p className="py-12 text-center text-sm text-gray-400">読み込み中...</p>
       ) : filtered.length === 0 ? (
-        <p className="py-12 text-center text-sm text-gray-400">
+        <p className="py-12 text-center text-sm text-gray-400 dark:text-gray-500">
           {tab === "unvisited"
             ? "行きたい場所を追加してみましょう"
             : "まだ訪問済みの場所はありません"}
