@@ -145,7 +145,7 @@ export default function HomePage() {
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value as SortKey)}
-          className="rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-xs text-gray-600 dark:text-gray-300 outline-none"
+          className="rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-600 dark:text-gray-300 outline-none"
         >
           <option value="createdAt">登録日順</option>
           <option value="priority">優先度順</option>
