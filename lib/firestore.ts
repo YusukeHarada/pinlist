@@ -6,6 +6,9 @@ import {
   deleteDoc,
   doc,
   serverTimestamp,
+  query,
+  where,
+  getDocs,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { Spot, SpotCategory } from "@/types/spot";
@@ -22,7 +25,23 @@ type AddSpotInput = {
   listId: string;
 };
 
+export class DuplicateSpotError extends Error {
+  constructor() {
+    super("この場所はすでに登録済みです");
+    this.name = "DuplicateSpotError";
+  }
+}
+
 export async function addSpot(input: AddSpotInput): Promise<string> {
+  const existing = await getDocs(
+    query(
+      collection(db, "spots"),
+      where("placeId", "==", input.placeId),
+      where("listId", "==", input.listId)
+    )
+  );
+  if (!existing.empty) throw new DuplicateSpotError();
+
   const docRef = await addDoc(collection(db, "spots"), {
     ...input,
     status: "unvisited",
