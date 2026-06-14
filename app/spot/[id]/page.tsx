@@ -165,6 +165,13 @@ export default function SpotDetailPage() {
             {spot.status === "unvisited" ? "訪問済みにする" : "未訪問に戻す"}
           </button>
 
+          <Link
+            href={`/spot/${id}/edit`}
+            className="flex h-12 items-center justify-center rounded-xl border border-gray-300 dark:border-gray-600 font-semibold text-gray-700 dark:text-gray-300"
+          >
+            編集する
+          </Link>
+
           <button
             onClick={handleDelete}
             disabled={working}

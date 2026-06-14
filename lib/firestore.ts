@@ -67,3 +67,18 @@ export async function markUnvisited(id: string): Promise<void> {
 export async function deleteSpot(id: string): Promise<void> {
   await deleteDoc(doc(db, "spots", id));
 }
+
+type UpdateSpotInput = {
+  name: string;
+  address: string;
+  lat: number;
+  lng: number;
+  placeId: string;
+  category: SpotCategory;
+  memo: string;
+  priority: 1 | 2 | 3;
+};
+
+export async function updateSpot(id: string, input: UpdateSpotInput): Promise<void> {
+  await updateDoc(doc(db, "spots", id), input);
+}
