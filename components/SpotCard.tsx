@@ -30,7 +30,7 @@ export default function SpotCard({ spot, backHref }: Props) {
     : `/spot/${spot.id}`;
 
   return (
-    <Link href={href}>
+    <Link href={href} className="block w-full">
       <div className="rounded-2xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-2 shadow-sm active:bg-gray-50 dark:active:bg-gray-700">
         <div className="flex items-start gap-3">
           <span className="mt-0.5 text-xl">{CATEGORY_ICON[spot.category]}</span>
