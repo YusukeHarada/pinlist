@@ -5,6 +5,10 @@ export type SpotCategory =
   | "cafe"
   | "camping"
   | "sightseeing"
+  | "goods"
+  | "plants"
+  | "bookstore"
+  | "accommodation"
   | "other";
 
 export type Spot = {

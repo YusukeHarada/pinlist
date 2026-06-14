@@ -12,6 +12,10 @@ const CATEGORY_COLOR: Record<SpotCategory, string> = {
   cafe: "#f59e0b",
   camping: "#22c55e",
   sightseeing: "#3b82f6",
+  goods: "#ec4899",
+  plants: "#84cc16",
+  bookstore: "#92400e",
+  accommodation: "#0891b2",
   other: "#8b5cf6",
 };
 

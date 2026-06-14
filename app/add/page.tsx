@@ -12,6 +12,10 @@ const CATEGORY_LABEL: Record<SpotCategory, string> = {
   cafe: "カフェ・喫茶",
   camping: "キャンプ場・アウトドア",
   sightseeing: "観光・おでかけ",
+  goods: "雑貨・ショップ",
+  plants: "植物店・花屋",
+  bookstore: "書店",
+  accommodation: "宿泊施設",
   other: "その他",
 };
 
