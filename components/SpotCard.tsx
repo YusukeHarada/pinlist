@@ -8,6 +8,10 @@ const CATEGORY_ICON: Record<SpotCategory, string> = {
   cafe: "☕",
   camping: "⛺",
   sightseeing: "🗺️",
+  goods: "🛍️",
+  plants: "🪴",
+  bookstore: "📚",
+  accommodation: "🛏️",
   other: "📍",
 };
 

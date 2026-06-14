@@ -16,6 +16,10 @@ const CATEGORIES: { value: SpotCategory | "all"; label: string }[] = [
   { value: "cafe", label: "カフェ" },
   { value: "camping", label: "アウトドア" },
   { value: "sightseeing", label: "観光" },
+  { value: "goods", label: "雑貨" },
+  { value: "plants", label: "植物" },
+  { value: "bookstore", label: "書店" },
+  { value: "accommodation", label: "宿泊" },
   { value: "other", label: "その他" },
 ];
 
