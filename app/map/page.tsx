@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 import { useSpots } from "@/hooks/useSpots";
 import type { Spot, SpotCategory } from "@/types/spot";
@@ -19,12 +19,31 @@ const CATEGORY_COLOR: Record<SpotCategory, string> = {
   other: "#8b5cf6",
 };
 
+const CATEGORIES: { value: SpotCategory | "all"; label: string }[] = [
+  { value: "all", label: "すべて" },
+  { value: "restaurant", label: "飲食店" },
+  { value: "cafe", label: "カフェ" },
+  { value: "camping", label: "アウトドア" },
+  { value: "sightseeing", label: "観光" },
+  { value: "goods", label: "雑貨" },
+  { value: "plants", label: "植物" },
+  { value: "bookstore", label: "書店" },
+  { value: "accommodation", label: "宿泊" },
+  { value: "other", label: "その他" },
+];
+
 export default function MapPage() {
   const { spots, loading } = useSpots(LIST_ID);
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
   const [selectedSpot, setSelectedSpot] = useState<Spot | null>(null);
+  const [category, setCategory] = useState<SpotCategory | "all">("all");
+
+  const filteredSpots = useMemo(
+    () => (category === "all" ? spots : spots.filter((s) => s.category === category)),
+    [spots, category]
+  );
 
   useEffect(() => {
     if (loading || !mapRef.current) return;
@@ -52,18 +71,18 @@ export default function MapPage() {
       markersRef.current.forEach((m) => { m.map = null; });
       markersRef.current = [];
 
-      // 全スポットが収まるようにビューを調整
-      if (spots.length === 1) {
-        map.setCenter({ lat: spots[0].lat, lng: spots[0].lng });
+      // 表示スポットが収まるようにビューを調整
+      if (filteredSpots.length === 1) {
+        map.setCenter({ lat: filteredSpots[0].lat, lng: filteredSpots[0].lng });
         map.setZoom(14);
-      } else if (spots.length > 1) {
+      } else if (filteredSpots.length > 1) {
         const bounds = new LatLngBounds();
-        spots.forEach((s) => bounds.extend({ lat: s.lat, lng: s.lng }));
+        filteredSpots.forEach((s) => bounds.extend({ lat: s.lat, lng: s.lng }));
         map.fitBounds(bounds, { top: 60, right: 20, bottom: 20, left: 20 });
       }
 
       // ピンを再描画
-      spots.forEach((spot) => {
+      filteredSpots.forEach((spot) => {
         const pin = document.createElement("div");
         pin.style.cssText = `
           width: 32px; height: 32px; border-radius: 50% 50% 50% 0;
@@ -89,7 +108,7 @@ export default function MapPage() {
     }
 
     initMap();
-  }, [spots, loading]);
+  }, [filteredSpots, loading]);
 
   const mapsUrl = selectedSpot
     ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedSpot.name)}&query_place_id=${selectedSpot.placeId}`
@@ -98,6 +117,26 @@ export default function MapPage() {
   return (
     <div className="relative h-[calc(100dvh-56px)]">
       <div ref={mapRef} className="h-full w-full" />
+
+      {/* カテゴリフィルター */}
+      <div className="absolute left-0 right-0 top-0 flex flex-wrap gap-1.5 bg-white/85 px-3 py-2 backdrop-blur-sm">
+        {CATEGORIES.map((c) => (
+          <button
+            key={c.value}
+            onClick={() => {
+              setCategory(c.value);
+              setSelectedSpot(null);
+            }}
+            className={`rounded-full px-2 py-1 text-xs font-medium transition ${
+              category === c.value
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 text-gray-600"
+            }`}
+          >
+            {c.label}
+          </button>
+        ))}
+      </div>
 
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/70">
