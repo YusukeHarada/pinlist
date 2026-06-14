@@ -11,6 +11,13 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   title: "行きたい場所リスト",
   description: "行きたい場所をサクッと登録・管理するアプリ",
+  icons: {
+    apple: "/apple-touch-icon.png",
+    icon: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+  },
 };
 
 export const viewport: Viewport = {
