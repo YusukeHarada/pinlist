@@ -23,7 +23,19 @@ const CATEGORIES: { value: SpotCategory | "all"; label: string }[] = [
   { value: "other", label: "その他" },
 ];
 
-type SortKey = "createdAt" | "priority";
+type SortKey = "category" | "createdAt" | "priority";
+
+const CATEGORY_ORDER: Record<SpotCategory, number> = {
+  restaurant: 0,
+  cafe: 1,
+  camping: 2,
+  sightseeing: 3,
+  goods: 4,
+  plants: 5,
+  bookstore: 6,
+  accommodation: 7,
+  other: 8,
+};
 
 export default function HomePage() {
   const { spots, loading } = useSpots(LIST_ID);
@@ -31,7 +43,7 @@ export default function HomePage() {
   const [category, setCategory] = useState<SpotCategory | "all">("all");
   const [city, setCity] = useState<string>("all");
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState<SortKey>("createdAt");
+  const [sort, setSort] = useState<SortKey>("category");
 
   const cities = useMemo(() => {
     const set = new Set<string>();
@@ -58,9 +70,12 @@ export default function HomePage() {
       })
       .sort((a: Spot, b: Spot) => {
         if (sort === "priority") return b.priority - a.priority;
-        const aTime = a.createdAt?.seconds ?? 0;
-        const bTime = b.createdAt?.seconds ?? 0;
-        return bTime - aTime;
+        if (sort === "category") {
+          const diff = CATEGORY_ORDER[a.category] - CATEGORY_ORDER[b.category];
+          if (diff !== 0) return diff;
+          return (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0);
+        }
+        return (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0);
       });
   }, [spots, tab, category, city, search, sort]);
 
@@ -150,6 +165,7 @@ export default function HomePage() {
           onChange={(e) => setSort(e.target.value as SortKey)}
           className="rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-base text-gray-600 dark:text-gray-300 outline-none"
         >
+          <option value="category">分類順</option>
           <option value="createdAt">登録日順</option>
           <option value="priority">優先度順</option>
         </select>
