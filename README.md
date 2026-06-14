@@ -61,6 +61,25 @@ npm run build  # プロダクションビルド
 
 ## モバイル対応メモ
 
-- `layout.tsx` で `viewport` を明示的にエクスポート（Next.js 15 の要件）
-- `<input>` の `font-size` は 16px 以上に統一（iOS Safari のオートズーム防止）
+### iOS Safari 対応（重要）
+
+| 対応 | 理由 |
+|---|---|
+| `layout.tsx` で `viewport` を明示的にエクスポート | Next.js 15 の要件。未設定だと iOS Safari がデフォルトの 980px ビューポートで描画する |
+| `<input>` / `<select>` / `<textarea>` の `font-size` を 16px 以上に統一 | 14px 未満だとフォーカス時にオートズームし、フォーカスを外しても戻らない |
+| `viewportFit: "cover"` は設定しない | `env(safe-area-inset-*)` の padding を入れない限り有害。notch 周辺のレイアウトが崩れる |
+| `globals.css` に `html, body { overscroll-behavior-x: none }` | iOS Safari がビジュアルビューポートを横方向にドリフトさせるのを防止 |
+| `globals.css` に `body { overflow-x: clip }` | 横方向のはみ出しをクリップ（`overflow-x: hidden` だとピンチズームが壊れる） |
+| フィルターチップは `flex-wrap` + `px-2 gap-1.5` で1行に収める | `overflow-x-auto` による横スクロールがページのズームに見える誤認を防ぐ |
+
+### SpotCard のレイアウト
+
+```
+[カテゴリアイコン] 場所名
+                   都道府県+市区町村  ★★☆
+```
+
+- 住所は `shortenAddress()` で都道府県＋市区町村のみに短縮（番地は不要）
+- 優先度★は2行目の右に配置（1行目を場所名だけにしてスッキリさせる）
+- `<Link>` には `block w-full` を付けてブロック要素として幅を確定させる
 

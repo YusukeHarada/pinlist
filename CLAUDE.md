@@ -142,7 +142,48 @@ type SpotList = {
 - タップターゲットは最低44px
 - 登録フローは1画面で完結させる（モーダルでなくページ遷移）
 - `layout.tsx` で `viewport` を明示的にエクスポートする（Next.js 15 要件。未設定だと iOS Safari がデフォルトの 980px ビューポートで描画する場合がある）
-- `<input>` の `font-size` は 16px（`text-base`）以上を維持する（14px 未満だと iOS Safari がフォーカス時にオートズームし、フォーカスを外した後も戻らないことがある）
+- `<input>` / `<select>` / `<textarea>` の `font-size` は 16px（`text-base`）以上を維持する（14px 未満だと iOS Safari がフォーカス時にオートズームし、フォーカスを外した後も戻らないことがある）
+- `viewportFit: "cover"` は設定しない（`env(safe-area-inset-*)` の padding を実装しない限り有害）
+
+### iOS Safari 横スクロール・ズーム対策
+
+`globals.css` に以下を設定済み：
+
+```css
+html,
+body {
+  overscroll-behavior-x: none; /* ビジュアルビューポートの横ドリフトを防止 */
+}
+
+body {
+  overflow-x: clip; /* 横オーバーフローをクリップ（hidden だとピンチズームが壊れる） */
+}
+```
+
+**注意**: `overflow-x: hidden` を `html` や `body` に設定するとピンチズームが完全に無効になる。必ず `clip` を使うこと。
+
+### SpotCard のレイアウト方針
+
+```
+[カテゴリアイコン] 場所名                   ← text-sm font-medium
+                   都道府県+市区町村  ★★☆  ← text-sm + shrink-0 stars
+```
+
+- 住所は `shortenAddress()` で都道府県＋市区町村のみに短縮（`lib/cityExtractor.ts` の抽出ロジックを参照）
+- 優先度★は2行目右に配置し、1行目を場所名のみにする
+- `<Link>` には必ず `block w-full` を付ける（デフォルトの `display: inline` だと iOS Safari で幅計算が狂う）
+- 住所 `<p>` には `min-w-0` を付ける（flex 内での `truncate` を確実に動作させるため）
+
+### フィルターチップのサイズ規則
+
+全チップが1行に収まるよう `px-2 gap-1.5 flex-wrap` を維持する。
+`overflow-x-auto` による横スクロールは「ページがズームされている」と誤認されるため使わない。
+
+| クラス | 理由 |
+|---|---|
+| `px-2`（横 8px）| `px-3` だとカテゴリ6チップ合計 466px > コンテンツ幅 370px |
+| `gap-1.5`（6px）| `gap-2` だとギャップ分で収まらなくなる |
+| `flex-wrap` | 収まらない場合は横スクロールではなく折り返し |
 
 ### マップビューの初期ズーム
 - スポット 0件: ズーム 10（東京中心）
