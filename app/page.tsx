@@ -1,36 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import ShareButton from "@/components/ShareButton";
 import Link from "next/link";
 import SpotCard from "@/components/SpotCard";
 import { useSpots } from "@/hooks/useSpots";
 import { extractCity } from "@/lib/cityExtractor";
 import type { Spot, SpotCategory } from "@/types/spot";
-
-function DebugOverlay() {
-  const [info, setInfo] = useState("...");
-  useEffect(() => {
-    const update = () => {
-      const sw = document.documentElement.scrollWidth;
-      const iw = window.innerWidth;
-      const scale = window.visualViewport?.scale?.toFixed(3) ?? "?";
-      setInfo(`sw:${sw} iw:${iw} scale:${scale}`);
-    };
-    update();
-    window.visualViewport?.addEventListener("resize", update);
-    window.visualViewport?.addEventListener("scroll", update);
-    return () => {
-      window.visualViewport?.removeEventListener("resize", update);
-      window.visualViewport?.removeEventListener("scroll", update);
-    };
-  }, []);
-  return (
-    <div style={{ position: "fixed", top: 0, left: 0, background: "#000", color: "#0f0", fontSize: 11, zIndex: 9999, padding: "2px 6px", pointerEvents: "none" }}>
-      {info}
-    </div>
-  );
-}
 
 const LIST_ID = "default";
 
@@ -85,8 +61,6 @@ export default function HomePage() {
   }, [spots, tab, category, city, search, sort]);
 
   return (
-    <>
-    <DebugOverlay />
     <main className="mx-auto max-w-lg overflow-x-hidden px-4 pb-24 pt-4">
       <div className="mb-3 flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">行きたい場所</h1>
@@ -202,6 +176,5 @@ export default function HomePage() {
         ＋
       </Link>
     </main>
-    </>
   );
 }
