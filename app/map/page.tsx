@@ -92,7 +92,7 @@ export default function MapPage() {
   }, [spots, loading]);
 
   const mapsUrl = selectedSpot
-    ? `https://maps.google.com/?q=place_id:${selectedSpot.placeId}`
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedSpot.name)}&query_place_id=${selectedSpot.placeId}`
     : "";
 
   return (

@@ -83,7 +83,7 @@ export default function SpotDetailPage() {
   }
 
   const stars = "★".repeat(spot.priority) + "☆".repeat(3 - spot.priority);
-  const mapsUrl = `https://maps.google.com/?q=place_id:${spot.placeId}`;
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.name)}&query_place_id=${spot.placeId}`;
   const staticMapUrl =
     `https://maps.googleapis.com/maps/api/staticmap` +
     `?center=${spot.lat},${spot.lng}&zoom=15&size=600x300&scale=2` +
