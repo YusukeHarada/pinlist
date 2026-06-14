@@ -94,12 +94,12 @@ export default function HomePage() {
       />
 
       {/* カテゴリフィルター */}
-      <div className="mb-2 flex gap-2 overflow-x-auto pb-1">
+      <div className="mb-2 flex flex-wrap gap-1.5">
         {CATEGORIES.map((c) => (
           <button
             key={c.value}
             onClick={() => setCategory(c.value)}
-            className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium transition ${
+            className={`rounded-full px-2 py-1 text-xs font-medium transition ${
               category === c.value
                 ? "bg-blue-600 text-white"
                 : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
@@ -112,10 +112,10 @@ export default function HomePage() {
 
       {/* エリアフィルター（市区町村が2つ以上あるときだけ表示） */}
       {cities.length >= 2 && (
-        <div className="mb-2 flex gap-2 overflow-x-auto pb-1">
+        <div className="mb-2 flex flex-wrap gap-1.5">
           <button
             onClick={() => setCity("all")}
-            className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium transition ${
+            className={`rounded-full px-2 py-1 text-xs font-medium transition ${
               city === "all"
                 ? "bg-green-600 text-white"
                 : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
@@ -127,7 +127,7 @@ export default function HomePage() {
             <button
               key={c}
               onClick={() => setCity(c)}
-              className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium transition ${
+              className={`rounded-full px-2 py-1 text-xs font-medium transition ${
                 city === c
                   ? "bg-green-600 text-white"
                   : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
